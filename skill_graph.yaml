@@ -1,0 +1,98 @@
+# MathBoss skill graph (v0 sample)
+# Full graph targets ~200 concept nodes across grades 1-6.
+# Each node: grade, concept, prerequisites, mastery criteria, template.
+#
+# The `interventions` section routes diagnosed misconceptions to a specific
+# node, so a classified error sends the student FORWARD to treatment,
+# not backward to retry the same level.
+
+meta:
+  name: mathboss-skill-graph
+  version: 0.1.0
+  grades: [1, 6]
+
+nodes:
+  counting-to-10:
+    grade: 1
+    concept: Counting objects up to 10
+    prerequisites: []
+    mastery: {consecutive_correct: 8}
+
+  counting-to-20:
+    grade: 1
+    concept: Counting objects up to 20
+    prerequisites: [counting-to-10]
+    mastery: {consecutive_correct: 8}
+
+  addition-within-10:
+    grade: 1
+    concept: Addition with sum <= 10
+    prerequisites: [counting-to-10]
+    mastery: {consecutive_correct: 10}
+    template: add_within_10
+
+  subtraction-within-10:
+    grade: 1
+    concept: Subtraction within 10 (inverse of addition)
+    prerequisites: [addition-within-10]
+    mastery: {consecutive_correct: 10}
+    template: sub_within_10
+
+  addition-within-20:
+    grade: 1
+    concept: Addition with sum <= 20
+    prerequisites: [addition-within-10]
+    mastery: {consecutive_correct: 10}
+    template: add_within_20
+
+  place-value-tens:
+    grade: 2
+    concept: Two-digit place value (tens and ones)
+    prerequisites: [counting-to-20]
+    mastery: {consecutive_correct: 8}
+
+  addition-with-carrying:
+    grade: 2
+    concept: Two-digit addition with carrying
+    prerequisites: [addition-within-20, place-value-tens]
+    mastery: {consecutive_correct: 10}
+    template: add_carry_2d
+
+  subtraction-with-borrowing:
+    grade: 2
+    concept: Two-digit subtraction with borrowing
+    prerequisites: [subtraction-within-10, place-value-tens]
+    mastery: {consecutive_correct: 10}
+    template: sub_borrow_2d
+
+  multiplication-as-repeated-addition:
+    grade: 3
+    concept: Multiplication as repeated addition
+    prerequisites: [addition-within-20]
+    mastery: {consecutive_correct: 8}
+
+  multiplication-tables-to-10:
+    grade: 3
+    concept: Multiplication tables up to 10 x 10
+    prerequisites: [multiplication-as-repeated-addition]
+    mastery: {consecutive_correct: 20}
+    template: mult_table
+
+  division-as-sharing:
+    grade: 3
+    concept: Division as fair sharing (inverse of multiplication)
+    prerequisites: [multiplication-tables-to-10]
+    mastery: {consecutive_correct: 10}
+
+  fractions-as-quantities:
+    grade: 4
+    concept: Fractions as parts of a whole
+    prerequisites: [division-as-sharing]
+    mastery: {consecutive_correct: 8}
+
+# Misconception -> intervention node routing.
+interventions:
+  OFF_BY_ONE: counting-to-20
+  WRONG_OPERATION: addition-within-20
+  SMALLER_FROM_LARGER: place-value-tens
+  NEAR_MISS_FACT: multiplication-tables-to-10
